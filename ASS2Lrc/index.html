@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Taka, 鹰小队">
+    <meta name="description" content="liulipack">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <link rel="icon" href="/favicon.png">
+    <title>ASS 转 Lrc - 鹰小队翻译组</title>
+    <!-- 外部样式 -->
+    <!-- 文档内样式 -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #303030;
+            color: #fff;
+            overflow: hidden;
+        }
+        textarea {
+            float: left;
+            border: 0;
+            background-color: inherit;
+            color: inherit;
+            width: calc(50% - 16px);
+            height: calc(100vh - 16px);
+            padding: 8px;
+            resize: none;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<textarea id="input" oninput="modifyASS()" placeholder="ASS 文件内容"></textarea>
+<textarea id="output" disabled placeholder="Lrc 文件内容"></textarea>
+
+<!-- 外部脚本 -->
+<!-- 文档内脚本 -->
+<script>
+// 定义`%ass`字幕文件元素和`$lrc`歌词文件元素块级变量。
+let $ass = document.querySelector('#input'),
+    $lrc = document.querySelector('#output');
+
+// 定义`modifyASS`字幕文件内容修改变量。
+function modifyASS() {
+    // 定义`lrc`歌词文件内容和`ass`字幕文件内容块级变量。
+    let lrc = '',
+        ass = $ass.value.split('\n');
+
+    // 遍历所有行
+    for(let curr = 0,num = ass.length; curr < num; curr++) {
+        // 如果行开头包含`Dialogue`就；
+        if(ass[curr].startsWith("Dialogue")) {
+            // 定义`split`拆分、`startTime`开始时间和`content`内容块级变量。
+            let split = ass[curr].split(','),
+                startTime = split[1],
+                content = split[9];
+
+            // 如果拆分的分段包含 ASS 标签就去除。
+            if(split !== 9) {
+                let len = split.length - 1;
+
+                content = split[len].replace(/.*}/,'');
+            }
+
+            // 写入歌词文件内容变量。
+            lrc += '[' + startTime + ']' + content + '\n';
+        };
+    };
+
+    // 输出
+    $lrc.value = lrc;
+}
+
+// 监听文本输入
+// $ass.oninput('compositionupdate', modifyASS());
+
+</script>
+</html>
