@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Taka, 鹰小队">
+    <meta name="description" content="liulipack">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>番茄时钟 - 鹰小队翻译组</title>
+    <!-- 外部样式 -->
+    <!-- 文档内样式 -->
+    <style>
+        body, html {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #FFFFFF89;
+            overflow: hidden;
+            font-family: 'Noto Sans Mono CJK SC bold', Helvetica, sans-serif;
+        }
+        html {
+            background-color: #F9A01E;
+        }
+        #time {
+            position: relative;
+            font-weight: 300;
+            font-size: 11.2em;
+            letter-spacing: -.04em;
+        }
+        #restore {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            font-size: .8em;
+        }
+    </style>
+</head>
+<body>
+
+<h1 id="time"></h1>
+<audio src="" id="audio"></audio>
+
+<label id="restore">
+    <input type="checkbox" hidden>
+    暂停或继续
+</label>
+
+<!-- 外部脚本 -->
+<!-- 文档内脚本 -->
+<script>
+// 定义必要数据
+// 定义`config`配置块级变量、`type`类型和`sec`剩余秒全局变量，和`RemDuration`剩余时间和`mode`当前模式变量。
+// {专注设置{时间(分钟), 结束音频, 背景色}, 修整设置{时间(秒), 结束音频, 背景色}}；
+let config = {
+    "focus": {
+        "time": "1500",
+        "sound": "focus_alert.ogg",
+        "bgcolor": "#F9A01E"
+    },
+    "break": {
+        "time": "300",
+        "sound": "break_alert.ogg",
+        "bgcolor": "#0A59F7"
+    }
+};
+var RemDuration,
+    mode = 'forcus';
+
+// 计时及展示
+function cooldown(duration, freeze = false) {
+    // 展示倒计时
+    document.querySelector('#time').innerHTML = formatTime(duration);
+    const timer = window.setInterval(()=>{
+        // 时间减一、展示并记录剩余时间和判断是否结束。
+        duration--;
+        document.querySelector('#time').innerHTML = formatTime(duration);
+        RemDuration = duration;
+        if (document.querySelector('#restore input').checked) {
+            clearInterval(timer);
+        }else if (duration < 0) {
+            clearInterval(timer);
+            altern();
+        }
+    }, 1000);
+}
+function formatTime(time) {
+    // 如果不是数值就返回`NaN`；
+    if (isNaN(time)) return "NaN";
+    // 定义`hr`时、`min`分和`sec`秒块级变量。
+    let hr = 0,
+        min = 0,
+        sec = parseInt(time)
+
+    // 如果秒大于 60；
+    if(sec > 60) {
+        // 获取正确的分与秒。
+        // % 为获取整除后的余数。
+        min = parseInt(sec / 60);
+        sec = parseInt(sec % 60);
+        // 如果分大于 60；
+        if (min > 60) {
+            // 获取正确的时、分与秒。
+            hr = parseInt(min / 60);
+            min = parseInt(min % 60);
+        }
+    }
+
+    // 返回格式化时间。
+    return patch(hr) + ':' + patch(min) + ':' + patch(sec);
+}
+function patch(num) {
+    return ("00" + num).slice(-2);
+}
+
+// 暂停恢复
+function unfreeze() {
+    let restore = document.querySelector('#restore input').checked;
+    if(restore) {
+        cooldown(RemDuration);
+    }
+}
+document.querySelector("#restore").addEventListener("click", unfreeze);
+
+// 模式切换
+function altern() {
+    const $audio = document.querySelector('#audio'),
+          $bg = document.querySelector('html')
+
+    console.log(mode)
+    if(mode == 'break') {
+        mode = 'forcus';
+        $bg.style.Color = config.break.color;
+        $bg.style.backgroundColor = config.focus.bgcolor;
+        $audio.src = config.focus.sound;
+        $audio.play();
+        cooldown(config.focus.time);
+    }else {
+        mode = 'break';
+        $bg.style.Color = config.break.color;
+        $bg.style.backgroundColor = config.break.bgcolor;
+        $audio.src = config.break.sound;
+        $audio.play();
+        cooldown(config.break.time);
+    }
+}
+
+cooldown(config.focus.time);
+
+</script>
+</html>
