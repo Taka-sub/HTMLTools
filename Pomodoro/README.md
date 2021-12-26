@@ -3,7 +3,7 @@
 浏览器问题，给个权限就行。
 
 **字体不显示**  
-请手动安装 Noto Sans Mono CJK SC bold 字体(https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSansMonoCJKsc-Bold.otf)。
+请手动安装 Noto Sans Mono CJK SC bold 字体(https://github.com/googlefonts/noto-cjk/raw/main/Sans/Mono/NotoSansMonoCJKsc-Bold.otf)和 Roboto Medium 字体(https://github.com/googlefonts/roboto/releases/download/v2.138/roboto-unhinted.zip)。
 
 
 # 音频来源
