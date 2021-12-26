@@ -32,7 +32,7 @@
             font-size: 11.2em;
             letter-spacing: -.04em;
         }
-        #restore {
+        label[for="restore"] {
             position: absolute;
             right: 8px;
             bottom: 8px;
@@ -45,8 +45,8 @@
 <h1 id="time"></h1>
 <audio src="" id="audio"></audio>
 
-<label id="restore">
-    <input type="checkbox" hidden>
+<label for="restore">
+    <input type="checkbox" id="restore" hidden>
     暂停或继续
 </label>
 
@@ -80,7 +80,7 @@ function cooldown(duration, freeze = false) {
         duration--;
         document.querySelector('#time').innerHTML = formatTime(duration);
         RemDuration = duration;
-        if (document.querySelector('#restore input').checked) {
+        if (document.querySelector('#restore').checked) {
             clearInterval(timer);
         }else if (duration < 0) {
             clearInterval(timer);
@@ -119,12 +119,12 @@ function patch(num) {
 
 // 暂停恢复
 function unfreeze() {
-    let restore = document.querySelector('#restore input').checked;
+    let restore = document.querySelector('#restore').checked;
     if(restore) {
         cooldown(RemDuration);
     }
 }
-document.querySelector("#restore").addEventListener("click", unfreeze);
+document.querySelector('label[for="restore"]').addEventListener('click', unfreeze);
 
 // 模式切换
 function altern() {
