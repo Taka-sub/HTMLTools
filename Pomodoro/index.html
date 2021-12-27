@@ -43,7 +43,7 @@
 </head>
 <body>
 
-<h1 id="time"></h1>
+<h1 id="time">Please enable JavaScript.</h1>
 <audio src="" id="audio"></audio>
 
 <label for="restore">
@@ -73,7 +73,7 @@ var RemDuration,
     mode = 'forcus';
 
 // 计时及展示
-function cooldown(duration, freeze = false) {
+function cooldown(duration) {
     // 展示倒计时
     document.querySelector('#time').innerHTML = formatTime(duration);
     const timer = window.setInterval(()=>{
@@ -103,19 +103,13 @@ function formatTime(time) {
         // % 为获取整除后的余数。
         min = parseInt(sec / 60);
         sec = parseInt(sec % 60);
-        // 如果分大于 60；
-        if (min > 60) {
-            // 获取正确的时、分与秒。
-            hr = parseInt(min / 60);
-            min = parseInt(min % 60);
-        }
     }
 
     // 返回格式化时间。
-    return patch(hr) + ':' + patch(min) + ':' + patch(sec);
+    return patch(min) + ':' + patch(sec);
 }
 function patch(num) {
-    return ("00" + num).slice(-2);
+    return ("0" + num).slice(-2);
 }
 
 // 暂停恢复
