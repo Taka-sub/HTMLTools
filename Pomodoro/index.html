@@ -97,8 +97,8 @@ function formatTime(time) {
         min = 0,
         sec = parseInt(time)
 
-    // 如果秒大于 60；
-    if(sec > 60) {
+    // 如果秒大于 59；
+    if(sec > 59) {
         // 获取正确的分与秒。
         // % 为获取整除后的余数。
         min = parseInt(sec / 60);
