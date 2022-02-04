@@ -81,6 +81,18 @@ let config = {
 };
 var RemDuration,
     mode = 'forcus';
+function GetQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return unescape(r[2]); return null;
+}
+
+// 更具 URL 参数调整时间。
+if(GetQueryString('focusTime') !== null) {
+    config.focus.time = GetQueryString('focusTime') * 60;
+}else if(GetQueryString('breakTime') !== null) {
+    config.focus.time = GetQueryString('breakTime') * 60;
+}
 
 // 计时及展示
 function cooldown(duration) {
